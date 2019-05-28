@@ -146,14 +146,6 @@ public class Rubik {
                 e -> {
                   rotation.removeListener(rotMap);
                   onRotation.set(false);
-                  System.out.println(
-                      Arrays.stream(rot.getCube())
-                          .flatMap(Arrays::stream)
-                          .flatMap(ints -> Arrays.stream(ArrayUtils.toObject(ints)))
-                          .min(Comparator.comparingInt(i -> i))
-                          .get());
-                  System.out.println(Arrays.deepToString(rot.getCube()));
-                  System.out.println(rot.correctPositions());
                 },
                 new KeyValue(rotation, angEnd)));
     timeline.playFromStart();
