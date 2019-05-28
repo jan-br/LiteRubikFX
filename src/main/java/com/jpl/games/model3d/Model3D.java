@@ -32,7 +32,7 @@ public class Model3D {
     }
     public void importObj(){
         try {// cube.obj
-            ObjImporter reader = new ObjImporter(getClass().getResource("Cube.obj").toExternalForm());
+            ObjImporter reader = new ObjImporter(this.getClass().getClassLoader().getResource("Cube.obj").toExternalForm());
             meshes=reader.getMeshes(); // set with the names of 117 meshes
             
             /*
