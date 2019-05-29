@@ -30,7 +30,9 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.apache.commons.lang3.ArrayUtils;
 
-/** @author jpereda, April 2014 - @JPeredaDnr */
+/**
+ * @author jpereda, April 2014 - @JPeredaDnr
+ */
 public class Rubik {
 
   private final Group cube = new Group();
@@ -142,7 +144,7 @@ public class Rubik {
         .getKeyFrames()
         .add(
             new KeyFrame(
-                Duration.millis(60),
+                Duration.millis(120),
                 e -> {
                   rotation.removeListener(rotMap);
                   onRotation.set(false);
@@ -200,29 +202,46 @@ public class Rubik {
         .execute(
             () -> {
               NeatAlgorithmBuilder.newBuilder()
-                  .setInitAction(() -> {})
-                  .setClearAction(() -> {})
+                  .setInitAction(() -> {
+                  })
+                  .setClearAction(() -> {
+                    shuffle();
+                    try {
+                      Thread.sleep(60 * 130);
+                    } catch (InterruptedException e) {
+                      e.printStackTrace();
+                    }
+                  })
                   .setNeatTask(
                       inputAdapter -> {
+                        for (int count = 0; count < 30; count++) {
+                          List<Integer> correctCubeLinear = rot.getCorrectCubeLinear();
+                          List<Integer> collect = rot.getCubeLinear();
+                          for (int i = 0; i < collect.size(); i++) {
+                            collect.set(i, collect.get(i) - 46);
+                            correctCubeLinear.set(i, correctCubeLinear.get(i) - 46);
+                          }
+                          float[] inputs = new float[27 * 2];
+                          for (int i = 0; i < collect.size(); i++) {
+                            inputs[i] = collect.get(i) / 26f;
+                            inputs[i + 27] = correctCubeLinear.get(i) / 26f;
+                          }
 
-                        List<Integer> correctCubeLinear = rot.getCorrectCubeLinear();
-                        List<Integer> collect = rot.getCubeLinear();
-                        for (int i = 0; i < collect.size(); i++) {
-                          collect.set(i, collect.get(i) - 46);
-                          correctCubeLinear.set(i, correctCubeLinear.get(i) - 46);
+                          Float[] calculate = ArrayUtils.toObject(inputAdapter.calculate(inputs));
+                          float f = Arrays.stream(calculate).max(Float::compare).get();
+                          List<Float> calculatedList = new LinkedList<>(Arrays.asList(calculate));
+
+                          String[] actions = {"U", "Ui", "F", "Fi", "L", "Li", "R", "Ri", "B", "Bi", "D", "Di"};
+                          String action = actions[calculatedList.indexOf(f)];
+                          this.rotateFace(action);
+                          try {
+                            Thread.sleep(200);
+                          } catch (InterruptedException e) {
+                            e.printStackTrace();
+                          }
+                          System.out.println(Arrays.toString(calculate));
                         }
-                        float[] inputs = new float[27 * 2];
-                        for (int i = 0; i < collect.size(); i++) {
-                          inputs[i] = collect.get(i) / 26f;
-                          inputs[i + 27] = correctCubeLinear.get(i) / 26f;
-                        }
-
-                        System.out.println(Arrays.toString(inputs));
-                        float[] calculate = inputAdapter.calculate(inputs);
-
-
-
-                        return 0f;
+                        return (float) rot.correctPositions();
                       })
                   .setParallelRuns(1)
                   .setOutputs(18)

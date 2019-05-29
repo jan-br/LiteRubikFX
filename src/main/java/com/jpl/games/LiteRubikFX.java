@@ -12,7 +12,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-/** @author jpereda, April 2014 - @JPeredaDnr */
+/**
+ * @author jpereda, April 2014 - @JPeredaDnr
+ */
 public class LiteRubikFX extends Application {
 
   private final BorderPane pane = new BorderPane();
@@ -50,30 +52,25 @@ public class LiteRubikFX extends Application {
 
     pane.getChildren().stream()
         .filter(n -> (n instanceof ToolBar))
-        .forEach(
-            tb ->
-                ((ToolBar) tb)
-                    .getItems().stream()
-                        .filter(n -> (n instanceof Button))
-                        .forEach(
-                            n -> {
-                              if (((Button) n).getText().equals("Shuffle")) {
-                                ((Button) n).setOnAction(e -> rubik.shuffle());
-                              } else if (((Button) n).getText().equals("Solve")) {
-                                ((Button) n).setOnAction(e -> rubik.solve());
-                              } else {
-                                ((Button) n)
-                                    .setOnAction(e -> rubik.rotateFace(((Button) n).getText()));
-                              }
-                            }));
+        .forEach(tb ->
+            ((ToolBar) tb)
+                .getItems().stream()
+                .filter(n -> (n instanceof Button))
+                .forEach(n -> {
+                  if (((Button) n).getText().equals("Shuffle")) {
+                    ((Button) n).setOnAction(e -> rubik.shuffle());
+                  } else if (((Button) n).getText().equals("Solve")) {
+                    ((Button) n).setOnAction(e -> rubik.solve());
+                  } else {
+                    ((Button) n).setOnAction(e -> rubik.rotateFace(((Button) n).getText()));
+                  }
+                }));
     rubik
         .isOnRotation()
         .addListener(
-            (ov, b, b1) -> {
-              pane.getChildren().stream()
-                  .filter(n -> (n instanceof ToolBar))
-                  .forEach(tb -> tb.setDisable(b1));
-            });
+            (ov, b, b1) -> pane.getChildren().stream()
+                .filter(n -> (n instanceof ToolBar))
+                .forEach(tb -> tb.setDisable(b1)));
     final Scene scene = new Scene(pane, 880, 680, true);
     scene.setFill(Color.ALICEBLUE);
     stage.setTitle("Rubik's Cube - JavaFX3D");
@@ -81,7 +78,9 @@ public class LiteRubikFX extends Application {
     stage.show();
   }
 
-  /** @param args the command line arguments */
+  /**
+   * @param args the command line arguments
+   */
   public static void main(String[] args) {
     launch(args);
   }
