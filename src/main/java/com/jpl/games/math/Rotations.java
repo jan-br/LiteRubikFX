@@ -96,6 +96,7 @@ public class Rotations {
     }
   }
 
+
   /* copy tempCube data in cube */
   public void save() {
     for (int f = 0; f < 3; f++) {
@@ -115,6 +116,17 @@ public class Rotations {
       System.out.print(" " + newArray.get(i));
     }
     System.out.println("");
+  }
+
+  public void setCube(int[][][] cube){
+    for (int x = 0; x < cube.length; x++) {
+      for (int y = 0; y < cube[x].length; y++) {
+        for (int z = 0; z < cube[x][y].length; z++) {
+          this.tempCube[x][y][z] = cube[x][y][z];
+        }
+      }
+    }
+    this.save();
   }
 
   /*

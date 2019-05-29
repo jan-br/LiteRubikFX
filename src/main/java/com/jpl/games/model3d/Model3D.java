@@ -58,7 +58,7 @@ public class Model3D {
             
             */
             
-            Affine affineIni=new Affine();            
+            Affine affineIni=new Affine();
             affineIni.prepend(new Rotate(-90, Rotate.X_AXIS));
             affineIni.prepend(new Rotate(90, Rotate.Z_AXIS));
             meshes.stream().forEach(s-> { 
